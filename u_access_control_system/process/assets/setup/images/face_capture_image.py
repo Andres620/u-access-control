@@ -1,0 +1,1 @@
+face_capture_image_path: str = "process/assets/setup/images/face_capture_image.png"
