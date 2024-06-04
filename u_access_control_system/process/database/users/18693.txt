@@ -75,3 +75,11 @@ Date: 2024-06-04, Time: 11:43:38, Room: Sala F, Status: Access granted
 Date: 2024-06-04, Time: 11:44:15, Room: Sala F, Status: Access granted
 
 Date: 2024-06-04, Time: 11:44:43, Room: Sala F, Status: Access granted
+
+Date: 2024-06-04, Time: 11:52:20, Room: Sala F, Status: Access granted
+
+Date: 2024-06-04, Time: 11:59:02, Room: Sala F, Status: Access granted
+
+Date: 2024-06-04, Time: 11:59:29, Room: Sala F, Status: Access granted
+
+Date: 2024-06-04, Time: 12:23:44, Room: Sala F, Status: Access granted

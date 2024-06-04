@@ -28,12 +28,12 @@ class GraphicalUserInterface:
         self.frame = CustomFrame(self.main_window)
 
         # config stream
-        self.stream_url = "http://192.168.1.200:4747/video"
+        # self.stream_url = "http://192.168.1.200:4747/video"
         self.signup_video = None
         self.login_video = None
-        self.cap = cv2.VideoCapture(self.stream_url)
-        self.cap.set(3, 1280)
-        self.cap.set(4, 720)
+        # self.cap = cv2.VideoCapture(self.stream_url)
+        # self.cap.set(3, 1280)
+        # self.cap.set(4, 720)
 
         # windows
         self.signup_window = None
@@ -71,9 +71,6 @@ class GraphicalUserInterface:
         # Boolean to control serial access        
         self.access_granted = False 
 
-        # Frame counter
-        self.frame_count = 0 
-
         self.init()
     
     def listen_serial(self):
@@ -89,6 +86,7 @@ class GraphicalUserInterface:
         self.signup_video.destroy()
         self.face_sign_up.__init__()
         self.signup_active = False
+        self.close_camera()
 
     def facial_sign_up(self):
         if self.cap:
@@ -147,14 +145,23 @@ class GraphicalUserInterface:
                 self.input_user_code.delete(0, END)
 
                 # new window
-                self.face_signup_window = Toplevel()
+                self.face_signup_window = Toplevel(self.main_window)
                 self.face_signup_window.title('face capture')
                 self.face_signup_window.geometry("1280x720")
 
                 self.signup_video = Label(self.face_signup_window)
                 self.signup_video.place(x=0, y=0)
                 self.signup_window.destroy()
+                self.open_camera()
                 self.facial_sign_up()
+                # Vincula el evento de cierre de la ventana a la función on_signup_close
+                self.face_signup_window.protocol("WM_DELETE_WINDOW", self.on_face_signup_close)
+    
+    def on_face_signup_close(self):
+        self.signup_active = False
+        self.close_camera()
+        self.face_signup_window.destroy()
+
 
     def gui_signup(self):
         self.signup_window = Toplevel(self.main_window)
@@ -187,6 +194,7 @@ class GraphicalUserInterface:
 
     def on_signup_close(self):
         self.signup_active = False
+        self.close_camera()
         self.signup_window.destroy()
     
 
@@ -199,14 +207,13 @@ class GraphicalUserInterface:
         # Restablecer la bandera después de que se complete el inicio de sesión
         self.login_active = False
         self.access_granted = False
-        self.frame_count = 0
+        self.close_camera()
 
     def facial_login(self):
         if self.cap:
             ret, frame_bgr = self.cap.read()
 
             if ret:
-                self.frame_count += 1
                 frame = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
 
                 # process
@@ -238,13 +245,31 @@ class GraphicalUserInterface:
 
     def gui_login(self):
         # new window
-        self.face_login_window = Toplevel()
+        self.face_login_window = Toplevel(self.main_window)
         self.face_login_window.title('Login')
         self.face_login_window.geometry("1280x720")
 
         self.login_video = Label(self.face_login_window)
         self.login_video.place(x=0, y=0)
+        self.open_camera()
         self.facial_login()
+        # Vincula el evento de cierre de la ventana a la función on_login_close
+        self.face_login_window.protocol("WM_DELETE_WINDOW", self.on_login_close)
+    
+    def on_login_close(self):
+        self.login_active = False
+        self.close_camera()
+        self.face_login_window.destroy()
+    
+    def open_camera(self):
+        self.stream_url = "http://192.168.1.200:4747/video"
+        self.cap = cv2.VideoCapture(self.stream_url)
+        self.cap.set(3, 1280)
+        self.cap.set(4, 720)
+        
+    def close_camera(self):
+        if self.cap:
+            self.cap.release()
 
     def init(self):
         # background
