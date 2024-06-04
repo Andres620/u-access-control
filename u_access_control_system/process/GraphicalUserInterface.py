@@ -88,6 +88,7 @@ class GraphicalUserInterface:
         self.face_signup_window.destroy()
         self.signup_video.destroy()
         self.face_sign_up.__init__()
+        self.signup_active = False
 
     def facial_sign_up(self):
         if self.cap:
